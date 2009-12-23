@@ -1,0 +1,16 @@
+a.materialCitation
+{ 
+  margin:0 5px 0 5px;
+  padding-left:16px;
+  background: #fff url('/site_media/img/vital3/icon_video.gif') left no-repeat;
+  color: #660000 !important; /*Firefox hack--stupid default CSS*/
+  cursor:pointer;
+  width:auto;
+  overflow:visible; /* IE 5-6 hack */
+  text-decoration: underline;
+ }
+
+a.materialCitation:after
+{ 
+  content: attr(title);
+ }

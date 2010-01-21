@@ -15,7 +15,7 @@
 	    };
 	},
 	createCitationHTML: function(annotation) {
-	    return ' <a href="'+annotation['annotation']+'" class="'+klass+'">'+annotation['title']+'</a> '
+	    return ' <a href="'+annotation['annotation']+'" class="'+klass+'">'+unescape(annotation['title'])+'</a> '
 	    ///note that this can get changed by the url_converter.
 	    ///see:
 	    ///http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/convert_urls

@@ -122,7 +122,7 @@
 				if (par && !par.name) return par;
 			    },
 			    onUnload:function( win) {
-				giveUp();
+
 			    },
 			    content:function(a_tag) {
 				return DOM.create('div',{},

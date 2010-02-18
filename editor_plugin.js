@@ -35,6 +35,35 @@
 	    
 	    tinyMCE.execCommand('mceInsertContent',false,cite_text);
 	},
+        decorateCitationAdders: function(ed, citation_plugin, dom) {
+	    var highlighter = null;
+	    each(DOM.select('img.'+klass, dom),function(citer) {
+		if (citer.onclick) {
+		    citer.onclick = function(evt){citation_plugin.addCitation(evt);};
+		}
+                
+		///Adds a little cursor to where it will get added.
+		///tested in Firefox, Webkit
+		Event.add(citer,'mouseover',function(evt) {
+		    if (highlighter == null) {
+			var active_ed = tinyMCE.activeEditor;
+			var editor_pos = DOM.getPos(active_ed.getContentAreaContainer());
+			var cursor_pos = DOM.getPos(active_ed.selection.getNode());
+			
+			var pos = {x:editor_pos.x-11, y:editor_pos.y+cursor_pos.y};
+			highlighter = DOM.create('div',{style:'height:12px;width:10px;background-color:red;position:absolute;top:'+pos.y+'px;left:'+pos.x+'px'},'>');
+			document.body.appendChild(highlighter);
+		    }
+		    evt.stopPropagation();
+		});
+	    },this);
+	    Event.add(document.body,'mouseover',function(evt) {
+		if (highlighter != null) {
+		    DOM.remove(highlighter);
+		    highlighter = null;
+		}
+	    });
+        },
 	init: function(ed,url) {
 	    //called when TinyMCE area is modified
 	    //but only gets triggered when focus comes to the editor.
@@ -49,33 +78,7 @@
 		this.newStyle = true;
 		var css_file = url + '/skins/' + (ed.settings.citation_skin || 'minimalist') + "/citation.css";
 
-		var highlighter = null;
-		each(DOM.select('img.'+klass),function(citer) {
-		    if (citer.onclick) {
-			citer.onclick = function(evt){self.addCitation(evt);};
-		    }
-
-		    ///Adds a little cursor to where it will get added.
-		    ///tested in Firefox, Webkit
-		    Event.add(citer,'mouseover',function(evt) {
-			if (highlighter == null) {
-			    var active_ed = tinyMCE.activeEditor;
-			    var editor_pos = DOM.getPos(active_ed.getContentAreaContainer());
-			    var cursor_pos = DOM.getPos(active_ed.selection.getNode());
-			    
-			    var pos = {x:editor_pos.x-11, y:editor_pos.y+cursor_pos.y};
-			    highlighter = DOM.create('div',{style:'height:12px;width:10px;background-color:red;position:absolute;top:'+pos.y+'px;left:'+pos.x+'px'},'>');
-			    document.body.appendChild(highlighter);
-			}
-			evt.stopPropagation();
-		    });
-		},this);
-		Event.add(document.body,'mouseover',function(evt) {
-		    if (highlighter != null) {
-			DOM.remove(highlighter);
-			highlighter = null;
-		    }
-		});
+                self.decorateCitationAdders(ed, self, document);
 
 		//DOM.loadCSS(css_file);//in main--should be done at discretion of page owner
 		ed.onInit.add(function(ed) {

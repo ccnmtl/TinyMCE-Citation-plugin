@@ -129,7 +129,7 @@
 			    },
 			    content:function(a_tag) {
 				return DOM.create('div',{},
-						  '<a href="javascript:openCitation(\''+a_tag.href+'\')">show annotation</a><div class="asset-object"><div id="videoclipbox" style="width: 322px; display:none;"><!-- width changes here too if video size changes --><div id="videoclip" class="asset-display"></div><div id="clipStrip"><div id="clipStripLabel"><!-- nothing --></div><div id="clipStripTrack"><div id="clipStripStart" class="clipSlider" onmouseover="return escape(\'Go to note start time\')" onclick="jumpToStartTime()" style="display:none"></div><div id="clipStripRange" class="clipStripRange" onclick="jumpToStartTime(true)" onmouseover="return escape(\'Play note\')" style="display:none"></div><div id="clipStripEnd" class="noteStripEnd" onmouseover="return escape(\'Go to note end time\')" onclick="jumpToEndTime()" style="display:none"></div></div></div></div></div>');
+						  '<a href="javascript:openCitation(\''+a_tag.href+'\')">show annotation</a><div class="asset-object"><div id="videoclipbox" style="width: 322px; display:none;"><!-- width changes here too if video size changes --><div id="videoclip" class="asset-display"></div><div id="clipstrip-display"></div></div></div>');
 				/*
 				return DOM.create('a',{href:a_tag.href,
 						       target:'_blank'

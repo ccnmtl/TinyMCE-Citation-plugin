@@ -14,3 +14,16 @@ a.materialCitation:after
 { 
   content: attr(title);
  }
+
+
+a.asset-quicktime,
+a.asset-youtube
+{
+	background-image: url(./icon_video.gif);
+}
+
+a.asset-image
+{
+    padding-left:18px;
+	background-image: url(./item_image.png);
+}

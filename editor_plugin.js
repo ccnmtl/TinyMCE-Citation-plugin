@@ -15,7 +15,12 @@
 	    };
 	},
 	createCitationHTML: function(annotation) {
-	    return ' <a href="'+annotation['annotation']+'" class="'+klass+'">'+unescape(annotation['title'])+'</a> '
+            var rv = ' <a href="'+annotation['annotation']+'" class="'+klass+'';
+            if (annotation.type) {
+                rv += ' asset-'+annotation.type;
+            }
+            rv += '">'+unescape(annotation['title'])+'</a> ';
+	    return rv;
 	    ///note that this can get changed by the url_converter.
 	    ///see:
 	    ///http://wiki.moxiecode.com/index.php/TinyMCE:Configuration/convert_urls
@@ -24,17 +29,37 @@
 	addCitation: function(evt) {
 	    evt = (evt) ? evt : window.event;
 	    var citation= evt.target||evt.srcElement;
-	    linkTitle=citation.getAttribute('title');
-	    linkName=citation.getAttribute('name');
-	    
-	    //removing extraneous 0's in the timecode
-	    linkTitle=linkTitle.replace(/([ -])0:/g,"$1");
-	    linkTitle=linkTitle.replace(/([ -])0/g,"$1");
-
-	    cite_text= this.createCitationHTML({annotation:linkName,title:linkTitle});
-	    
-	    tinyMCE.execCommand('mceInsertContent',false,cite_text);
+            var annotationDict = this.decodeCitation(citation);
+            if (annotationDict) {
+	        cite_text= this.createCitationHTML(annotationDict);
+	        tinyMCE.execCommand('mceInsertContent',false,cite_text);
+            }
 	},
+        decodeCitation: function(img_elt) {
+            var annotationDict = false;
+            var reg = String(img_elt.src).match(/#(annotation=.+)$/);
+	    if (reg != null) {
+                annotationDict = {};
+		//stolen from Mochi
+		var pairs = reg[1].replace(/\+/g, "%20").split(/\&amp\;|\&\#38\;|\&#x26;|\&/);
+		each(pairs,function(p) {
+		    var kv = p.split('=');
+                    var key = kv.shift();
+		    annotationDict[key] = kv.join('=');
+		});
+		//removing extraneous 0's in the timecode
+                annotationDict['title']= (annotationDict['title']
+                                          .replace(/([ -])0:/g,"$1")
+                                          .replace(/([ -])0/g,"$1"));
+            } else {
+		var annotationHref=img_elt.getAttribute("name");
+		var linkTitle=img_elt.getAttribute("title");
+                if (linkTitle && annotationHref) {
+                    annotationDict = {annotation:annotationHref, title:linkTitle};
+                }
+            }
+            return annotationDict;
+        },
         decorateCitationAdders: function(ed, citation_plugin, dom) {
 	    var highlighter = null;
 	    each(DOM.select('img.'+klass, dom),function(citer) {
@@ -150,45 +175,9 @@
 	    }
 	    var triggerChange = false;
 	    each( inst.dom.select('img'), function(c) {
-		var reg = String(c.src).match(/#(annotation=.+)$/)
-		if (reg != null) {
-		    var annotationDict = {};
-		    //stolen from Mochi
-		    var pairs = reg[1].replace(/\+/g, "%20").split(/\&amp\;|\&\#38\;|\&#x26;|\&/);
-		    each(pairs,function(p) {
-			var kv = p.split('=');
-			annotationDict[kv[0]] = kv[1];
-		    });
-		    //var linkName=c.getAttribute("name");
-		    //var linkTitle=c.getAttribute("title");
-		    var annotationHref = annotationDict['annotation'];
-		    var linkTitle = annotationDict['title'];
-			
-		    //removing extraneous 0's in the timecode
-		    linkTitle=linkTitle.replace(/([ -])0:/g,"$1");
-		    linkTitle=linkTitle.replace(/([ -])0/g,"$1");
-
-		    function swapCitation(inst,oldCitation, klass,linkTitle,annotationHref) {
-			var newCitation = inst.dom.create('span',{},'&#160;<input type="button" class="'+klass+'" value="'+linkTitle+'" onclick="openCitation(\''+annotationHref+'\')" />&#160;');
-			inst.dom.replace(newCitation,oldCitation);
-		    }
-		    function swapCitation_Mochi(inst,oldCitation, klass,linkTitle,annotationHref) {
-			//temporarily swap which document MochiKit uses for DOM manipulation
-			//This is necessary, because the A tag must be created with dok.createElement()
-			var mochi_doc = MochiKit.DOM._document;
-			MochiKit.DOM._document = inst.getDoc();
-			newCitation = SPAN();//null, '&#160;', INPUT({'type':'button','class':klass,'value':linkTitle}),'&#160;');
-			MochiKit.DOM._document = mochi_doc;
-			
-			//don't understand why 'onclick' can't be set with Mochi, but it can't
-			//newCitation.childNodes[1].setAttribute('onclick',"openCitation('"+annotationHref+"')");
-			newCitation.innerHTML = '&#160;<input type="button" class="'+klass+'" value="'+linkTitle+'" onclick="openCitation(\''+annotationHref+'\')" />&#160;';
-			swapDOM(c,newCitation);
-		    }
-
-		    if (!this.newStyle) {
-			swapCitation(inst,c, klass,linkTitle,annotationHref);
-		    } else {//new!
+                var annotationDict = this.decodeCitation(c);
+		if (annotationDict) {
+                    if (this.newStyle) {//new!
 			inst.dom.replace(
 			    inst.dom.create('span', 
 					    null, 
@@ -196,6 +185,25 @@
 					   )
 			    ,c//old annotation
 			);
+                    } else {
+		        function swapCitation(inst,oldCitation, klass,linkTitle,annotationHref) {
+			    var newCitation = inst.dom.create('span',{},'&#160;<input type="button" class="'+klass+'" value="'+linkTitle+'" onclick="openCitation(\''+annotationHref+'\')" />&#160;');
+			    inst.dom.replace(newCitation,oldCitation);
+		        }
+		        function swapCitation_Mochi(inst,oldCitation, klass,linkTitle,annotationHref) {
+			    //temporarily swap which document MochiKit uses for DOM manipulation
+			    //This is necessary, because the A tag must be created with dok.createElement()
+			    var mochi_doc = MochiKit.DOM._document;
+			    MochiKit.DOM._document = inst.getDoc();
+			    newCitation = SPAN();//null, '&#160;', INPUT({'type':'button','class':klass,'value':linkTitle}),'&#160;');
+			    MochiKit.DOM._document = mochi_doc;
+			    
+			    //don't understand why 'onclick' can't be set with Mochi, but it can't
+			    //newCitation.childNodes[1].setAttribute('onclick',"openCitation('"+annotationHref+"')");
+			    newCitation.innerHTML = '&#160;<input type="button" class="'+klass+'" value="'+linkTitle+'" onclick="openCitation(\''+annotationHref+'\')" />&#160;';
+			    swapDOM(c,newCitation);
+		        }
+			swapCitation(inst,c, klass,annotationDict['title'],annotationDict['annotation']);
 		    }
 		    triggerChange = true;
 		}//if /#!annotation/.test(c.src)

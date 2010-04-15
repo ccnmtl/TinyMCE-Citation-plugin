@@ -150,16 +150,25 @@
 				if (par && !par.name) return par;
 			    },
 			    onUnload:function( win) {
-
+				if (self.current_opener)
+				    self.current_opener.onclick = null;
 			    },
 			    content:function(a_tag) {
-				return DOM.create('div',{},
-						  '<a href="javascript:openCitation(\''+a_tag.href+'\')">show annotation</a><div class="asset-object"><div id="videoclipbox" style="width: 322px; display:none;"><!-- width changes here too if video size changes --><div id="videoclip" class="asset-display"></div><div id="clipstrip-display"></div></div></div>');
-				/*
-				return DOM.create('a',{href:a_tag.href,
-						       target:'_blank'
-						      },'open annotation');
-                                 */
+				var ann_href = String(a_tag.href);
+				var dom = DOM.create('div',{},
+						     '<a href="'+ann_href+'">show annotation</a><div class="asset-object"><div id="videoclipbox" style="width: 322px; display:none;"><!-- width changes here too if video size changes --><div id="videoclip" class="asset-display"></div><div id="clipstrip-display"></div></div></div>');
+				dom.firstChild.onclick = function(evt) {
+				    openCitation(ann_href,{
+					autoplay:true,
+					targets:{
+					    asset:'',
+					    clipstrip:''
+					}
+				    });
+				    evt.preventDefault();
+				}
+				self.current_opener = dom.firstChild;
+				return dom;
 			    }
 			});
 		    }

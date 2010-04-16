@@ -150,24 +150,26 @@
 				if (par && !par.name) return par;
 			    },
 			    onUnload:function( win) {
-				if (self.current_opener)
+				if (self.current_opener) {
 				    self.current_opener.onclick = null;
+				    self.asset_target = null;
+				}
 			    },
 			    content:function(a_tag) {
 				var ann_href = String(a_tag.href);
 				var dom = DOM.create('div',{},
-						     '<a href="'+ann_href+'">show annotation</a><div class="asset-object"><div id="videoclipbox" style="width: 322px; display:none;"><!-- width changes here too if video size changes --><div id="videoclip" class="asset-display"></div><div id="clipstrip-display"></div></div></div>');
+						     '<a href="'+ann_href+'">show annotation</a><div class="asset-object"><div class="assetbox" style="width: 322px; display:none;"><div class="asset-display"></div><div class="clipstrip-display"></div></div></div>');
 				dom.firstChild.onclick = function(evt) {
 				    openCitation(ann_href,{
 					autoplay:true,
 					targets:{
-					    asset:'',
-					    clipstrip:''
+					    asset:self.asset_target
 					}
 				    });
 				    evt.preventDefault();
 				}
 				self.current_opener = dom.firstChild;
+				self.asset_target = dom.lastChild;
 				return dom;
 			    }
 			});

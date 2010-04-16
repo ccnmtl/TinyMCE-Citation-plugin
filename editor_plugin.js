@@ -169,7 +169,8 @@
 				    evt.preventDefault();
 				}
 				self.current_opener = dom.firstChild;
-				self.asset_target = dom.lastChild;
+                                //target should be the thing that has display:none
+				self.asset_target = dom.lastChild.firstChild;
 				return dom;
 			    }
 			});

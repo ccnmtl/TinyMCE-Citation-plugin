@@ -154,13 +154,16 @@
                                     Event.remove(self.current_opener, 'click', self.opener_listener);
 				    self.asset_target = null;
 				}
+                                if (self.citation && self.citation.onUnload) {
+                                    self.citation.onUnload();
+                                }
 			    },
 			    content:function(a_tag) {
 				var ann_href = String(a_tag.href);
 				var dom = DOM.create('div',{},
 						     '<a href="'+ann_href+'">show annotation</a><div class="asset-object"><div class="assetbox" style="width: 322px; display:none;"><div class="asset-display"></div><div class="clipstrip-display"></div></div></div>');
 		                self.opener_listener = Event.add(dom.firstChild,'click',function(evt) {
-				    openCitation(ann_href,{
+				    self.citation = openCitation(ann_href,{
 					autoplay:true,
 					targets:{
 					    asset:self.asset_target

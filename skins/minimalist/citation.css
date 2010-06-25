@@ -22,7 +22,8 @@ a.asset-youtube
 	background-image: url(./icon_video.gif);
 }
 
-a.asset-image
+a.asset-image,
+a.asset-image_fpx
 {
     padding-left:18px;
 	background-image: url(./item_image.png);

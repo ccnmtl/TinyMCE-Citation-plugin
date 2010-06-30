@@ -2,7 +2,7 @@ a.materialCitation
 { 
   margin:0 5px 0 5px;
   padding-left:16px;
-  background: #fff url('/site_media/img/vital3/icon_video.gif') left no-repeat;
+  background: #fff url('./item_videoclip.png') left no-repeat;
   color: #660000 !important; /*Firefox hack--stupid default CSS*/
   cursor:pointer;
   width:auto;
@@ -16,15 +16,20 @@ a.materialCitation:after
  }
 
 
-a.asset-quicktime,
-a.asset-youtube
-{
-	background-image: url(./icon_video.gif);
+a.asset_title.asset-whole {
+    background-image: url(./item_video.gif);
 }
 
 a.asset-image,
 a.asset-image_fpx
 {
+    padding-left:24px;
+    background-image: url(./item_imageclip.png);
+}
+
+a.asset-whole.asset-image,
+a.asset-whole.asset-image_fpx
+{
     padding-left:18px;
-	background-image: url(./item_image.png);
+    background-image: url(./item_image.gif);
 }

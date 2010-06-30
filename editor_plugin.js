@@ -10,7 +10,7 @@
 		longname : 'Citation Plugin',
 		author : 'Schuyler Duveen',
 		authorurl : 'http://ccnmtl.columbia.edu',
-		infourl : 'http://ccnmtl.columbia.edu/projects/vital/',
+		infourl : 'http://ccnmtl.columbia.edu/mediathread',
 		version : "1.1" //for tinymce 3!
 	    };
 	},
@@ -18,6 +18,9 @@
             var rv = ' <a href="'+annotation['annotation']+'" class="'+klass+'';
             if (annotation.type) {
                 rv += ' asset-'+annotation.type;
+            }
+            if (annotation.range1==0) {
+                rv += ' asset-whole';
             }
             rv += '">'+unescape(annotation['title'])+'</a> ';
 	    return rv;
@@ -121,14 +124,13 @@
 			},50);
 			evt.preventDefault();
 
-			if (tinymce.isWebKit || tinymce.isIE) {
-			    //Firefox seems to copy the element itself
-			    // but these folks need a little help
-			    // maybe Firefox is the buggy one?
+			if ( !/Firefox\/3/.test(navigator.userAgent)) {
+			    //Firefox 3.6- seems to copy the element itself
+			    // Firefox is the buggy one.
 			    var droptarget = evt.target;
 			    var url = String(evt.dataTransfer.getData("Text"));
 			    var newimg = ed.dom.create('img',{src:url});
-
+                        
 			    if (tinymce.isIE) {
 				//IE's target is always BODY
 				droptarget = ed.selection.getStart();
@@ -192,34 +194,19 @@
 	    each( inst.dom.select('img'), function(c) {
                 var annotationDict = this.decodeCitation(c);
 		if (annotationDict) {
-                    if (this.newStyle) {//new!
-			inst.dom.replace(
-			    inst.dom.create('span', 
-					    null, 
-					    this.createCitationHTML(annotationDict)
-					   )
-			    ,c//old annotation
-			);
-                    } else {
-		        function swapCitation(inst,oldCitation, klass,linkTitle,annotationHref) {
-			    var newCitation = inst.dom.create('span',{},'&#160;<input type="button" class="'+klass+'" value="'+linkTitle+'" onclick="openCitation(\''+annotationHref+'\')" />&#160;');
-			    inst.dom.replace(newCitation,oldCitation);
-		        }
-		        function swapCitation_Mochi(inst,oldCitation, klass,linkTitle,annotationHref) {
-			    //temporarily swap which document MochiKit uses for DOM manipulation
-			    //This is necessary, because the A tag must be created with dok.createElement()
-			    var mochi_doc = MochiKit.DOM._document;
-			    MochiKit.DOM._document = inst.getDoc();
-			    newCitation = SPAN();//null, '&#160;', INPUT({'type':'button','class':klass,'value':linkTitle}),'&#160;');
-			    MochiKit.DOM._document = mochi_doc;
-			    
-			    //don't understand why 'onclick' can't be set with Mochi, but it can't
-			    //newCitation.childNodes[1].setAttribute('onclick',"openCitation('"+annotationHref+"')");
-			    newCitation.innerHTML = '&#160;<input type="button" class="'+klass+'" value="'+linkTitle+'" onclick="openCitation(\''+annotationHref+'\')" />&#160;';
-			    swapDOM(c,newCitation);
-		        }
-			swapCitation(inst,c, klass,annotationDict['title'],annotationDict['annotation']);
-		    }
+                    //WORKAROUND: when firefox 3.5 drags a whole asset, it drags the H2
+                    if (c.parentNode.parentNode.tagName.toLowerCase() == 'h2'
+                        && /asset/.test(c.parentNode.parentNode.className)
+                       ) {
+                        c = c.parentNode.parentNode;
+                    }
+		    inst.dom.replace(
+			inst.dom.create('span', 
+					null, 
+					this.createCitationHTML(annotationDict)
+				       )
+			,c//old annotation
+		    );
 		    triggerChange = true;
 		}//if /#!annotation/.test(c.src)
 	    }, this);

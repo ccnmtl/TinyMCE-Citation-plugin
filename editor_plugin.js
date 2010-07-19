@@ -63,7 +63,7 @@
             }
             return annotationDict;
         },
-        decorateCitationAdders: function(ed, citation_plugin, dom) {
+        _decorateCitationAdders: function(ed, citation_plugin, dom) {
 	    var highlighter = null;
 	    each(DOM.select('img.'+klass, dom),function(citer) {
 		if (citer.onclick) {
@@ -106,8 +106,10 @@
 		this.newStyle = true;
 		var css_file = url + '/skins/' + (ed.settings.citation_skin || 'minimalist') + "/citation.css";
 
-                self.decorateCitationAdders(ed, self, document);
-
+                self._decorateCitationAdders(ed, self, document);
+                self.decorateCitationAdders = function(dom) {
+                    self._decorateCitationAdders(ed, self, dom);
+                }
 		//DOM.loadCSS(css_file);//in main--should be done at discretion of page owner
 		ed.onInit.add(function(ed) {
 		    ///1. add CSS to editor context

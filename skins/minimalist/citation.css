@@ -23,8 +23,9 @@ a.asset_title.asset-whole {
 a.asset-image,
 a.asset-image_fpx
 {
-    padding-left:24px;
+    padding-left:25px;
     background-image: url(./item_imageclip.png);
+    background-position:left -3px;
 }
 
 a.asset-whole.asset-image,

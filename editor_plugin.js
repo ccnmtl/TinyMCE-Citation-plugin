@@ -76,10 +76,12 @@
 		    if (highlighter == null) {
 			var active_ed = tinyMCE.activeEditor;
 			var editor_pos = DOM.getPos(active_ed.getContentAreaContainer());
+			var editor_rect = DOM.getRect(active_ed.getContentAreaContainer());
 			var cursor_pos = DOM.getPos(active_ed.selection.getNode());
 			
-			var pos = {x:editor_pos.x-11, y:editor_pos.y+cursor_pos.y};
-			highlighter = DOM.create('div',{style:'height:12px;width:10px;background-color:red;position:absolute;top:'+pos.y+'px;left:'+pos.x+'px'},'>');
+			var pos = {x:editor_pos.x + editor_rect.w, y:editor_pos.y+cursor_pos.y};
+			highlighter = DOM.create('div',{'class': 'mceContentBodyCursor', style:'top:'+pos.y+'px;left:'+pos.x+'px'},'&#171;');
+			console.log(highlighter);
 			document.body.appendChild(highlighter);
 		    }
 		    evt.stopPropagation();

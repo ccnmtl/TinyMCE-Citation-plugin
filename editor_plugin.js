@@ -34,10 +34,10 @@
 	    var citation= evt.target||evt.srcElement;
             var annotationDict = this.decodeCitation(citation);
             if (annotationDict) {
-	        cite_text= this.createCitationHTML(annotationDict);
-	        tinyMCE.execCommand('mceInsertContent',false,cite_text);
+                cite_text= this.createCitationHTML(annotationDict);
+                tinyMCE.execCommand('mceInsertContent',false,cite_text);
             }
-	},
+	    },
         decodeCitation: function(img_elt) {
             var annotationDict = false;
             var reg = String(img_elt.src).match(/#(annotation=.+)$/);
@@ -81,7 +81,6 @@
 			
 			var pos = {x:editor_pos.x + editor_rect.w, y:editor_pos.y+cursor_pos.y};
 			highlighter = DOM.create('div',{'class': 'mceContentBodyCursor', style:'top:'+pos.y+'px;left:'+pos.x+'px'},'&#171;');
-			console.log(highlighter);
 			document.body.appendChild(highlighter);
 		    }
 		    evt.stopPropagation();

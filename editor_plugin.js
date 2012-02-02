@@ -161,6 +161,7 @@
 				}
                                 if (self.citation && self.citation.onUnload) {
                                     self.citation.onUnload();
+                                    self.citation = null;
                                 }
 			    },
 			    content:function(a_tag) {
@@ -168,13 +169,14 @@
 				var dom = DOM.create('div',{},
 						     '<a href="'+ann_href+'">View Selection</a><div class="asset-object"><div class="assetbox" style="width: 322px; display:none;"><div class="asset-display"></div><div class="clipstrip-display"></div></div></div>');
 		                self.opener_listener = Event.add(dom.firstChild,'click',function(evt) {
-				    self.citation = openCitation(ann_href,{
-					autoplay:true,
-					targets:{
-					    asset:self.asset_target
-					}
-				    });
-                                    evt.preventDefault();
+                            var cv = new CitationView();
+                            cv.init({
+                                autoplay:true,
+                                targets:{
+                                    asset:self.asset_target
+                                }});
+                            self.citation = cv.openCitation(a_tag);
+                            evt.preventDefault();
 				});
 				self.current_opener = dom.firstChild;
                                 //target should be the thing that has display:none

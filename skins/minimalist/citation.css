@@ -20,6 +20,18 @@ a.asset_title.asset-whole {
     background-image: url(./item_video.gif);
 }
 
+a.asset-mp3 {
+    padding-left:25px;
+    background-image: url(./item_audioclip.png);
+    background-position:left -3px;
+}
+
+a.asset-whole.asset-mp3 {
+    padding-left:18px;
+    background-image: url(./item_audio.png);
+    background-position:left -3px;
+}
+
 a.asset-image,
 a.asset-image_fpx
 {

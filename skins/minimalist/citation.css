@@ -1,12 +1,12 @@
 a.materialCitation
 { 
-  margin:0 5px 0 5px;
-  padding-left:16px;
-  background: #fff url('./item_videoclip.png') left no-repeat;
+  margin: 0 5px 0 5px;
+  padding-left: 23px;
+  background: #fff url('./meth_video.png') left no-repeat;
   color: #660000 !important; /*Firefox hack--stupid default CSS*/
-  cursor:pointer;
-  width:auto;
-  overflow:visible; /* IE 5-6 hack */
+  cursor: pointer;
+  width: auto;
+  overflow: visible; /* IE 5-6 hack */
   text-decoration: underline;
  }
 
@@ -17,32 +17,30 @@ a.materialCitation:after
 
 
 a.asset_title.asset-whole {
-    background-image: url(./item_video.gif);
+    background-image: url(./meth_video.png);
 }
 
 a.asset-mp3 {
-    padding-left:25px;
-    background-image: url(./item_audioclip.png);
+    padding-left: 27px;
+    background-image: url(./meth_audio.png);
     background-position:left -3px;
 }
 
 a.asset-whole.asset-mp3 {
-    padding-left:18px;
-    background-image: url(./item_audio.png);
+    padding-left: 27px;
+    background-image: url(./meth_audio.png);
     background-position:left -3px;
 }
 
 a.asset-image,
-a.asset-image_fpx
-{
-    padding-left:25px;
-    background-image: url(./item_imageclip.png);
+a.asset-image_fpx {
+    padding-left: 27px;
+    background-image: url(./meth_image.png);
     background-position:left -3px;
 }
 
 a.asset-whole.asset-image,
-a.asset-whole.asset-image_fpx
-{
-    padding-left:18px;
-    background-image: url(./item_image.gif);
+a.asset-whole.asset-image_fpx {
+    padding-left: 27px;
+    background-image: url(./meth_image.png);
 }

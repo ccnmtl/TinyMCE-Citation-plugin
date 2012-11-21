@@ -20,13 +20,15 @@ a.asset_title.asset-whole {
     background-image: url(./meth_video.png);
 }
 
-a.asset-mp3 {
+a.asset-mp3,
+a.asset-mp4_audio {
     padding-left: 27px;
     background-image: url(./meth_audio.png);
     background-position:left -3px;
 }
 
-a.asset-whole.asset-mp3 {
+a.asset-whole.asset-mp3,
+a.asset-whole.asset-mp4_audio {
     padding-left: 27px;
     background-image: url(./meth_audio.png);
     background-position:left -3px;

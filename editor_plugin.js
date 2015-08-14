@@ -15,14 +15,14 @@
 	    };
 	},
 	createCitationHTML: function(annotation) {
-            var rv = ' <a href="'+annotation['annotation']+'" class="'+klass+'';
+            var rv = ' <a href="'+annotation.annotation+'" class="'+klass+'';
             if (annotation.type) {
                 rv += ' asset-'+annotation.type;
             }
-            if (annotation.range1==0) {
+            if (annotation.range1 === 0) {
                 rv += ' asset-whole';
             }
-            rv += '">'+unescape(annotation['title'])+'</a> ';
+            rv += '">'+unescape(annotation.title)+'</a> ';
 	    return rv;
 	    ///note that this can get changed by the url_converter.
 	    ///see:
@@ -41,7 +41,7 @@
         decodeCitation: function(img_elt) {
             var annotationDict = false;
             var reg = String(img_elt.src).match(/#(annotation=.+)$/);
-	    if (reg != null) {
+	    if (reg !== null) {
                 annotationDict = {};
 		//stolen from Mochi
 		var pairs = reg[1].replace(/\+/g, "%20").split(/\&amp\;|\&\#38\;|\&#x26;|\&/);
@@ -51,7 +51,7 @@
 		    annotationDict[key] = kv.join('=');
 		});
 		//removing extraneous 0's in the timecode
-                annotationDict['title']= (annotationDict['title']
+                annotationDict.title = (annotationDict.title
                                           .replace(/([ -])0:/g,"$1")
                                           .replace(/([ -])0/g,"$1"));
             } else {
@@ -73,7 +73,7 @@
 		///Adds a little cursor to where it will get added.
 		///tested in Firefox, Webkit
 		Event.add(citer,'mouseover',function(evt) {
-		    if (highlighter == null) {
+		    if (highlighter === null) {
 			var active_ed = tinyMCE.activeEditor;
 			var editor_pos = DOM.getPos(active_ed.getContentAreaContainer());
 			var editor_rect = DOM.getRect(active_ed.getContentAreaContainer());
@@ -87,7 +87,7 @@
 		});
 	    },this);
 	    Event.add(document.body,'mouseover',function(evt) {
-		if (highlighter != null) {
+		if (highlighter !== null) {
 		    DOM.remove(highlighter);
 		    highlighter = null;
 		}
@@ -101,7 +101,7 @@
 	    this.newStyle = false;
 	    this.legacy = true; //legacy support
 
-	    if (typeof tinymce.plugins.EditorWindow == 'function'
+	    if (typeof tinymce.plugins.EditorWindow === 'function'
 		//TODO: also test for >IE6 and other stupidness
 	       ) {
 		this.newStyle = true;
@@ -110,7 +110,7 @@
                 self._decorateCitationAdders(ed, self, document);
                 self.decorateCitationAdders = function(dom) {
                     self._decorateCitationAdders(ed, self, dom);
-                }
+                };
 		//DOM.loadCSS(css_file);//in main--should be done at discretion of page owner
 		ed.onInit.add(function(ed) {
 		    ///1. add CSS to editor context
@@ -147,7 +147,7 @@
 
 		    ///3. register Citation Plugin as a special cursor window
 		    ///   which can show the annotation inline, etc.
-		    if (typeof ed.addCursorWindow == 'function') {
+		    if (typeof ed.addCursorWindow === 'function') {
 			ed.addCursorWindow({
 			    name:'citation',
 			    test:function(current_elt) {
@@ -192,7 +192,7 @@
 	_onChange : function(inst, undo_level, undo_manager) {
 	    var dok=inst.getDoc();
 	    ///VITAL HACK
-	    if (typeof(wordCount) == 'function') {
+	    if (typeof(wordCount) === 'function') {
 		wordCount();//window.setTimeout(wordCount,0);
 	    }
 	    var triggerChange = false;
@@ -200,17 +200,17 @@
                 var annotationDict = this.decodeCitation(c);
 		if (annotationDict) {
                     //WORKAROUND: when firefox 3.5 drags a whole asset, it drags the H2
-                    if (c.parentNode.parentNode.tagName.toLowerCase() == 'h2'
-                        && /asset/.test(c.parentNode.parentNode.className)
+                    if (c.parentNode.parentNode.tagName.toLowerCase() === 'h2' &&
+                        /asset/.test(c.parentNode.parentNode.className)
                        ) {
                         c = c.parentNode.parentNode;
                     }
 		    inst.dom.replace(
-			inst.dom.create('span', 
-					null, 
-					this.createCitationHTML(annotationDict)
-				       )
-			,c//old annotation
+			    inst.dom.create(
+                    'span',
+					null,
+					this.createCitationHTML(annotationDict)),
+			    c //old annotation
 		    );
 		    triggerChange = true;
 		}//if /#!annotation/.test(c.src)
@@ -225,27 +225,27 @@
 			  some weird DOM deletions, or copying the value as text outside.
 			 */
 			//logDebug('nextsibling',typeof(c.nextSibling));
-			if (typeof(c.nextSibling) == 'object') {
-			    if (c.nextSibling == null) {
+			if (typeof(c.nextSibling) === 'object') {
+			    if (c.nextSibling === null) {
 				//logDebug('  next  null');
-			    } else if (c.nextSibling.nodeType == 3) {
+			    } else if (c.nextSibling.nodeType === 3) {
 				var x = c.nextSibling.textContent;
 				//logDebug('x'+c.nextSibling.data+'x',c.nextSibling.textContent.length);
-				if (x == '' || x == ' ') {
+				if (x === '' || x === ' ') {
 				    //logDebug('  next space');
 				    c.nextSibling.nodeValue= '\xa0'; //nbsp
 				}
 			    }
 			}
-			if (typeof(c.previousSibling) == 'object') {
-			    if (c.previousSibling == null) {
+			if (typeof(c.previousSibling) === 'object') {
+			    if (c.previousSibling === null) {
 				//logDebug('  previous  null');
 				var p = c.parentNode;
 				p.insertBefore(dok.createTextNode('\xa0'),c);
-			    } else if (c.previousSibling.nodeType == 3) {
-				var x = c.previousSibling.textContent;
-				//logDebug('x'+c.previousSibling.data+'x',c.previousSibling.textContent.length);
-				if (x == '' || x == ' ') {
+			    } else if (c.previousSibling.nodeType === 3) {
+				var xx = c.previousSibling.textContent;
+				//logDebug('xx'+c.previousSibling.data+'xx',c.previousSibling.textContent.length);
+				if (xx === '' || xx === ' ') {
 				    //logDebug('  previous space');
 				    c.previousSibling.nodeValue= '\xa0'; //nbsp
 				}

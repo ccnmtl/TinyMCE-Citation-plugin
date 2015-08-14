@@ -1,0 +1,5 @@
+language: node_js
+before_script:
+  - npm install jshint --prefix .
+script:
+  - ./node_modules/jshint/bin/jshint *.js

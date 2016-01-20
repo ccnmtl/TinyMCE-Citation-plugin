@@ -1,0 +1,6 @@
+{
+    "preset": "google",
+    "validateIndentation": 4,
+    "disallowTrailingWhitespace": true,
+    "requireCamelCaseOrUpperCaseIdentifiers": false
+}

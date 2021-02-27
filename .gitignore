@@ -3,3 +3,4 @@
 *.pyc
 ve
 .svn
+node_modules/

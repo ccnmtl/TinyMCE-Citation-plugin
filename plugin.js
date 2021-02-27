@@ -60,8 +60,8 @@
                 });
                 //removing extraneous 0's in the timecode
                 annotationDict.title = (annotationDict.title
-                                          .replace(/([ -])0:/g,'$1')
-                                          .replace(/([ -])0/g,'$1'));
+                                          .replace(/([ -])0:/g, '$1')
+                                          .replace(/([ -])0/g, '$1'));
             } else {
                 var annotationHref = imgElt.getAttribute('name');
                 var linkTitle = imgElt.getAttribute('title');
@@ -82,8 +82,8 @@
                         citationPlugin.addCitation(evt);
                     };
                 }
-            },this);
-            EventUtils.bind(document.body,'mouseover', function(evt) {
+            }, this);
+            EventUtils.bind(document.body, 'mouseover', function(evt) {
                 if (highlighter !== null) {
                     DOM.remove(highlighter);
                     highlighter = null;
@@ -122,7 +122,7 @@
                     tinymce.dom.EventUtils.bind(iframe, 'drop', function(evt) {
                         setTimeout(function() {
                             self._onChange(ed);
-                        },50);
+                        }, 50);
                         evt.preventDefault();
 
                         if (!/Firefox\/3/.test(navigator.userAgent)) {
@@ -130,7 +130,7 @@
                             // Firefox is the buggy one.
                             var droptarget = evt.target;
                             var url = String(evt.dataTransfer.getData('Text'));
-                            var newimg = ed.dom.create('img',{src: url});
+                            var newimg = ed.dom.create('img', {src: url});
 
                             if (tinymce.isIE) {
                                 //IE's target is always BODY
@@ -253,7 +253,7 @@
                     if (typeof(c.previousSibling) === 'object') {
                         if (c.previousSibling === null) {
                             var p = c.parentNode;
-                            p.insertBefore(dok.createTextNode('\xa0'),c);
+                            p.insertBefore(dok.createTextNode('\xa0'), c);
                         } else if (c.previousSibling.nodeType === 3) {
                             x = c.previousSibling.textContent;
                             if (x === '' || x === ' ') {

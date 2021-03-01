@@ -1,6 +1,0 @@
-language: node_js
-sudo: false
-script:
-  - npm install jshint jscs
-  - jshint plugin.js
-  - jscs plugin.js

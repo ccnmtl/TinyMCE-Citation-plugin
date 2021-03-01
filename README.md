@@ -1,1 +1,2 @@
-[![Build Status](https://travis-ci.org/ccnmtl/TinyMCE-Citation-plugin.svg?branch=master)](https://travis-ci.org/ccnmtl/TinyMCE-Citation-plugin)
+[![Actions Status](https://github.com/ccnmtl/TinyMCE-Citation-plugin/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/TinyMCE-Citation-plugin/actions)
+

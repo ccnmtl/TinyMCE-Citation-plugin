@@ -1,0 +1,14 @@
+name: build-and-test
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install
+        run: npm install
+      - name: Build with Makefile
+        run: make
